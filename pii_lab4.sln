@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pii_lab4", "pii_lab4\pii_lab4.csproj", "{C092F2AA-36D6-4B0F-9CD9-335A220129BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C092F2AA-36D6-4B0F-9CD9-335A220129BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C092F2AA-36D6-4B0F-9CD9-335A220129BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C092F2AA-36D6-4B0F-9CD9-335A220129BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C092F2AA-36D6-4B0F-9CD9-335A220129BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86F4C18F-CDBF-468D-93BA-DD2B25B3139C}
+	EndGlobalSection
+EndGlobal
