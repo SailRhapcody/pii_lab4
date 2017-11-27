@@ -62,5 +62,19 @@ namespace pii_lab4.View
             Console.ResetColor();
             Console.WriteLine();
         }
+        public void writeCurrentUserLine(Model.Player player)
+        {
+            if(String.Compare(player.getColor(), "whitePlayer") == 0){
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("White Player : " + player.getName());
+            }
+
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Black Player : " + player.getName());
+            }
+
+        }
     }
 }

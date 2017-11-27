@@ -10,6 +10,7 @@ namespace pii_lab4.Controller
     {
         static private Model.Board board;
         static private Controller.MakeTurn makeTurn;
+        static private Controller.Validator validator;
         static private View.Render render;
         static private Model.Player player1;
         static private Model.Player player2;
@@ -20,25 +21,36 @@ namespace pii_lab4.Controller
             render = new View.Render();
             makeTurn = new Controller.MakeTurn();
             render.show(board.getCells());
-            int counter = 0;
+            bool isWhite = false;
+            int[,] values = new int[2,2];
+            bool falseMove = false;
+            validator = new Controller.Validator();
             while (true)
             {
-                if(counter == 0)
+                isWhite = !isWhite;
+                falseMove = !falseMove;
+                //Отрисовка имени игрока под доской
+                if(isWhite)
                 {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine("White Player : " + player1.getName());
-                    counter = 1;
+                    render.writeCurrentUserLine(player1);
                 }
-                else if(counter == 1) {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Black Player : " + player2.getName());
-                    counter = 0;
+                else {
+                    render.writeCurrentUserLine(player2);
                 }
-                board.setCells(makeTurn.moveChecker());
+
+                //Пока не будет введен корректный ход
+                while (falseMove) {
+                    //Проверка символьной правильности введенного хода
+                    values = makeTurn.moveChecker();
+                    //
+                    if(validator.check(board.getCells(), values, isWhite)) falseMove = false;
+                }
+                board.setCells(values);
                 render.show(board.getCells());
             }
         }
 
+        //Ввод имен игроков.Начало программы.
         static private bool playerInitializer()
         {
             player1 = new Model.Player();
