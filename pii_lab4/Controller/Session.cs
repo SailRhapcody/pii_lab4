@@ -41,9 +41,9 @@ namespace pii_lab4.Controller
                 //Пока не будет введен корректный ход
                 while (falseMove) {
                     //Проверка символьной правильности введенного хода
-                    values = makeTurn.moveChecker();
+                    values = makeTurn.moveChecker(isWhite);
                     //
-                    if(validator.check(board.getCells(), values, isWhite)) falseMove = false;
+                    if(validator.check(board.getCells(), ref values, isWhite)) falseMove = false;
                 }
                 board.setCells(values);
                 render.show(board.getCells());

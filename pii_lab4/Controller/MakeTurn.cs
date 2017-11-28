@@ -8,8 +8,10 @@ namespace pii_lab4.Controller
 {
     class MakeTurn
     {
-        public int[,] moveChecker()
+        private bool isWhite;
+        public int[,] moveChecker(bool currentPlayer)
         {
+            isWhite = currentPlayer;
             Console.Write("posToMove : ");
             String pos = Console.ReadLine();
             Console.Write("posTarget : ");
@@ -53,8 +55,51 @@ namespace pii_lab4.Controller
             if((int)s[0] >= 97 && (int)s[0] <= 104 && (int)s[1] >=48 && (int)s[1] <= 55
                 && (int)s2[0] >= 97 && (int)s2[0] <= 104 && (int)s2[1] >=48 && (int)s2[1] <= 55)
             {
-                int checkDiff1 = Math.Abs((int)s[0] - (int)s2[0]);
-                int checkDiff2 = Math.Abs((int)s[1] - (int)s2[1]);
+                return checkStep(s, s2);
+            }
+            else return false;
+        }
+
+        private bool checkStep(String s, String s2)
+        {
+                int checkDiff1 = (int)s[0] - (int)s2[0];
+                int checkDiff2 = (int)s[1] - (int)s2[1];
+            if (Math.Abs(checkDiff1) == 1 && Math.Abs(checkDiff2) == 1)
+            {
+                if (isWhite)
+                {
+                    if (checkDiff2 < 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if(checkDiff2 > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                return false;
+                }
+
+        }
+
+        private bool checkStep(int [,] val)
+        {
+            int checkDiff1 = Math.Abs(val[0, 0] - val[1, 0]);
+            int checkDiff2 = Math.Abs(val[0, 1] - val[1, 1]);
                 if(checkDiff1 == 1 && checkDiff2 == 1) {
                     return true;
                 }
@@ -62,8 +107,6 @@ namespace pii_lab4.Controller
                 {
                     return false;
                 }
-            }
-            else return false;
         }
 
         private int getNumFromChar(char c)

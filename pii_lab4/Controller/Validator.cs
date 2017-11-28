@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace pii_lab4.Controller
@@ -12,9 +13,11 @@ namespace pii_lab4.Controller
         private int[,] values;
         private bool isWhite;
         private int r1, c1, r2, c2;
-        private bool smtInLeft = false;
-        private bool smtInRight = false;
-        public bool check(Model.Cell[,] cel, int[,] val, bool isWhite)
+        private bool smtInLeftWhite = false;
+        private bool smtInRightWhite = false;
+        private bool smtInLeftBlack = false;
+        private bool smtInRightBlack = false;
+        public bool check(Model.Cell[,] cel, ref int[,] val, bool isWhite)
         {
             this.isWhite = isWhite;
             cells = cel;
@@ -29,7 +32,7 @@ namespace pii_lab4.Controller
                 (!isWhite && String.Compare(cells[r1, c1].getStatus(), "black") == 0)) {
                 if (takePosForAnyChecker())
                 {
-                    return true;
+                    return validMove();
                     //Вставить валидность мува
                 }
                 else
@@ -45,13 +48,196 @@ namespace pii_lab4.Controller
 
         private bool validMove()
         {
+            Console.WriteLine(smtInRightWhite + " " + smtInLeftWhite + "; " + smtInRightBlack + " " + smtInLeftBlack);
             if (isWhite)
             {
-                return true;
+                Console.WriteLine("white");
+                Console.WriteLine(smtInLeftWhite + " " + smtInRightWhite);
+                Thread.Sleep(3000);
+                //Нет ни слева ни справа
+                if (!(smtInLeftWhite || smtInRightWhite))
+                {
+                    if (cells[r2, c2].getStatus() == "empty")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //Если есть что то слева 
+                else if (smtInLeftWhite && !smtInRightWhite)
+                {
+                    if (c2 < c1)
+                    {
+                        if (c2 - 1 >= 0 && r2 + 1 <= 7)
+                        {
+                            values[1, 1] = r2 + 1;
+                            values[1, 0] = c2 - 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //Если есть что то справа
+                else if (smtInRightWhite && !smtInLeftWhite)
+                {
+                    Console.WriteLine("we are here");
+                    if (c2 > c1)
+                    {
+                        if (c2 + 1 <= 7 && r2 + 1 <= 7)
+                        {
+                            values[1, 1] = r2 + 1;
+                            values[1, 0] = c2 + 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //Значит что то есть и справа и слева
+                else
+                {
+                    if (c2 < c1)
+                    {
+                        if (c2 - 1 >= 0 && r2 + 1 <= 7)
+                        {
+                            values[1, 1] = r2 + 1;
+                            values[1, 0] = c2 - 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (c2 > c1)
+                    {
+                        if (c2 + 1 <= 7 && r2 + 1 <= 7)
+                        {
+                            values[1, 1] = r2 + 1;
+                            values[1, 0] = c2 + 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
             else
             {
-                return true;
+                Console.WriteLine("black");
+                Console.WriteLine(smtInLeftBlack + " " + smtInRightBlack);
+                Thread.Sleep(3000);
+                //Нет ни слева ни справа
+                if (!(smtInLeftBlack || smtInRightBlack))
+                {
+                    if (cells[r2, c2].getStatus() == "empty")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //Если есть что то слева 
+                else if (smtInLeftBlack && !smtInRightBlack)
+                {
+                    if (c2 < c1)
+                    {
+                        if (c2 - 1 >= 0 && r2 - 1 >= 0)
+                        {
+                            values[1, 1] = r2 - 1;
+                            values[1, 0] = c2 - 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //Если есть что то справа
+                else if (smtInRightBlack && !smtInLeftBlack)
+                {
+                    Console.WriteLine("we are here");
+                    if (c2 > c1)
+                    {
+                        if (c2 + 1 <= 7 && r2 - 1 >= 0)
+                        {
+                            values[1, 1] = r2 - 1;
+                            values[1, 0] = c2 + 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                //Значит что то есть и справа и слева
+                else
+                {
+                    if (c2 < c1)
+                    {
+                        if (c2 - 1 >= 0 && r2 - 1 >= 0)
+                        {
+                            values[1, 1] = r2 + 1;
+                            values[1, 0] = c2 - 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (c2 > c1)
+                    {
+                        if (c2 + 1 >= 7 && r2 - 1 >= 0)
+                        {
+                            values[1, 1] = r2 - 1;
+                            values[1, 0] = c2 + 1;
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
 
@@ -67,7 +253,7 @@ namespace pii_lab4.Controller
                     else
                     {
                         //Совпадает ил введенные координаты с координатами на которыъ нужно взять взятие
-                        if(r1 == currentRow && c1 == currentCol) { return true; }
+                        if (r1 == currentRow && c1 == currentCol) { return true; }
                         else { return false; }
                     }
                 }
@@ -78,91 +264,197 @@ namespace pii_lab4.Controller
         //Проверка отдельной клетки на наличие возможных взятий
         private bool findCheckerNeighbours(int currentRow, int currentCol)
         {
-            smtInRight = false;
-            smtInLeft = false;
-            if (isWhite)
+            smtInLeftBlack = false;
+            smtInRightBlack = false;
+            smtInLeftWhite = false;
+            smtInRightWhite = false;
+            try
             {
-                //поиск шашек со статусом соотв.цвету игрока в массиве и проверка диагоналей на наличие шашек противника.
-                if (cells[currentRow, currentCol].getStatus() == "white")
+                if (isWhite)
                 {
-                    if (currentRow != 7)
+                    //поиск шашек со статусом соотв.цвету игрока в массиве и проверка диагоналей на наличие шашек противника.
+                    if (cells[currentRow, currentCol].getStatus() == "white")
                     {
-                        if (currentCol == 0)
+                        if (currentRow != 7)
                         {
-                            if (cells[currentRow + 1, currentCol + 1].getStatus() == "black")
+                            if (currentCol == 0)
                             {
-                                smtInRight = true;
-                                return false;
+                                //Белые - право
+                                if (cells[currentRow + 1, currentCol + 1].getStatus() == "black")
+                                {
+                                    if (currentRow + 2 <= 7)
+                                    {
+                                        if (cells[currentRow + 2, currentCol + 2].getStatus() == "empty")
+                                        {
+                                            smtInRightWhite = true;
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                    else { return true; }
+                                }
                             }
-                        }
-                        else if (currentCol == 7)
-                        {
-                            if (cells[currentRow + 1, currentCol - 1].getStatus() == "black")
+                            else if (currentCol == 7)
                             {
-                                smtInLeft = true;
-                                return false;
+                                if (cells[currentRow + 1, currentCol - 1].getStatus() == "black")
+                                {
+                                    if (currentRow + 2 <= 7)
+                                    {
+                                        if (cells[currentRow + 2, currentCol - 2].getStatus() == "empty")
+                                        {
+                                            smtInLeftWhite = true;
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (cells[currentRow + 1, currentCol - 1].getStatus() == "black" || cells[currentRow + 1, currentCol + 1].getStatus() == "black")
+                                {
+                                    if (currentRow + 2 <= 7 && currentCol - 2 >= 0)
+                                    {
+                                        if (cells[currentRow + 2, currentCol - 2].getStatus() == "empty")
+                                        {
+                                            smtInLeftWhite = true;
+                                        }
+                                    }
+                                    if (currentRow + 2 <= 7 && currentCol + 2 <= 7)
+                                    {
+                                        if (cells[currentRow + 2, currentCol + 2].getStatus() == "empty")
+                                        {
+                                            smtInRightWhite = true;
+                                        }
+                                    }
+                                    if (smtInRightWhite || smtInLeftWhite)
+                                    {
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        return false;
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            if (cells[currentRow + 1, currentCol - 1].getStatus() == "black" || cells[currentRow + 1, currentCol + 1].getStatus() == "black")
-                            {
-                                smtInLeft = true;
-                                smtInRight = true;
-                                return false;
-                            }
+                            Console.WriteLine("Final Line achieved");
+                            return true;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Final Line achieved");
-                        return false;
+                        return true;
+                    }
+                }
+                //Есть ли черные шашки которые могут взять белую шашку
+                else
+                {
+                    if (cells[currentRow, currentCol].getStatus() == "black")
+                    {
+                        if (currentRow != 0)
+                        {
+                            if (currentCol == 0)
+                            {
+                                //Черные - право
+                                if (cells[currentRow - 1, currentCol + 1].getStatus() == "white")
+                                {
+                                    if (currentRow - 2 >= 0)
+                                    {
+                                        if (cells[currentRow - 2, currentCol + 2].getStatus() == "empty")
+                                        {
+                                            smtInRightBlack = true;
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                    else { return true; }
+                                }
+                            }
+                            else if (currentCol == 7)
+                            {
+                                if (cells[currentRow - 1, currentCol - 1].getStatus() == "white")
+                                {
+                                    if (currentRow - 2 >= 0)
+                                    {
+                                        if (cells[currentRow - 2, currentCol - 2].getStatus() == "empty")
+                                        {
+                                            smtInLeftBlack = true;
+                                            return false;
+                                        }
+                                        else
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (cells[currentRow - 1, currentCol - 1].getStatus() == "white" || cells[currentRow - 1, currentCol + 1].getStatus() == "white")
+                                {
+                                    if (currentRow - 2 >= 0 && currentCol - 2 >= 0)
+                                    {
+                                        if (cells[currentRow - 2, currentCol - 2].getStatus() == "empty")
+                                        {
+                                            smtInLeftBlack = true;
+                                        }
+                                    }
+                                    if (currentRow - 2 >= 0 && currentCol + 2 <= 7)
+                                    {
+                                        if (cells[currentRow - 2, currentCol + 2].getStatus() == "empty")
+                                        {
+                                            smtInRightWhite = true;
+                                        }
+                                    }
+                                    if (smtInRightWhite || smtInLeftWhite)
+                                    {
+                                        return false;
+                                    }
+                                    else
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Final Line achieved");
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return true;
                     }
                 }
             }
-            //Есть ли черные шашки которые могут взять белую шашку
-            else
+            catch(IndexOutOfRangeException e)
             {
-                if (cells[currentRow, currentCol].getStatus() == "black")
-                {
-                    if (currentRow != 0)
-                    {
-                        if (currentCol == 0)
-                        {
-                            if (cells[currentRow - 1, currentCol + 1].getStatus() == "white")
-                            {
-                                smtInRight = true;
-                                return false;
-                            }
-                        }
-                        else if (currentCol == 7)
-                        {
-                            if (cells[currentRow - 1, currentCol - 1].getStatus() == "white")
-                            {
-                                smtInLeft = true;
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            if (cells[currentRow - 1, currentCol - 1].getStatus() == "white" || cells[currentRow - 1, currentCol + 1].getStatus() == "white")
-                            {
-                                smtInLeft = true;
-                                smtInRight = true;
-                                return false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("Final Line achieved");
-                        return false;
-                    }
-                }
+                Console.WriteLine(e.Message);
             }
             return true;
         }
-
 
     }
 
